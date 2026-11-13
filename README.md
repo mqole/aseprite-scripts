@@ -9,9 +9,11 @@ All of these use the CC0 license. Feel free to use, modify, or otherwise mess ar
 Helpful links:
 
 [Official Aseprite API](https://aseprite.org/api/)
+
 [Aseprite Script Examples repo](https://github.com/aseprite/Aseprite-Script-Examples)
 
 [Lua Docs](https://www.lua.org/docs.html)
 
 [Aseprite Debugger for VSCode](https://marketplace.visualstudio.com/items?itemName=zarstensen.aseprite-debugger)
+
 [Aseprite Lua Library](https://github.com/RampantDespair/Aseprite-Library)
