@@ -9,7 +9,6 @@
 local error_sprite   = "No sprite open!"
 local error_RGB      = { "Gradient Map only works on RGB sprites.",
     "Convert via Sprite \226\150\184 Color Mode \226\150\184 RGB Color, then run it again." }
-local error_mapLayer = "Could not find the selected layer!"
 
 -- ============================================
 -- GRADIENT PRESETS (by Heosphorus)
@@ -100,7 +99,7 @@ local function showMainDialog()
         return
     end
     if sprite.colorMode ~= ColorMode.RGB then
-        app.alert(error_RGB)
+        app.alert { text = error_RGB }
         return
     end
 
@@ -199,7 +198,7 @@ local function showMainDialog()
     local function loadPreset(preset)
         stops = {}
         for _, d in ipairs(preset.data) do
-            addStop(d[1] * 255, Color {r = d[2][1], g = d[2][2], b = d[2][3], a = d[2][4] or 255})
+            addStop(d[1] * 255, Color { r = d[2][1], g = d[2][2], b = d[2][3], a = d[2][4] or 255 })
         end
         selectedStop = stops[1].id
     end
@@ -236,14 +235,14 @@ local function showMainDialog()
     -- used for preset previews
     -- these are formatted a little different!
     local function sampleFromData(data, pos)
-        if #data == 1 or pos <= data[1][1] or pos >= data[#data][1]then
+        if #data == 1 or pos <= data[1][1] or pos >= data[#data][1] then
             local d = data[1][2]
-            return Color {r = d[1], g = d[2], b = d[3], a = d[4] or 255}
+            return Color { r = d[1], g = d[2], b = d[3], a = d[4] or 255 }
         end
 
         for i = 1, #data - 1 do
             local pos0, c0 = data[i][1], data[i][2]
-            local pos1, c1 = data[i+1][1], data[i+1][2]
+            local pos1, c1 = data[i + 1][1], data[i + 1][2]
 
             if pos >= pos0 and pos <= pos1 then
                 local f = (pos - pos0) / (pos1 - pos0)
@@ -257,7 +256,7 @@ local function showMainDialog()
         end
 
         local d = data[#data][2]
-        return Color {r = d[1], g = d[2], b = d[3], a = d[4] or 255}
+        return Color { r = d[1], g = d[2], b = d[3], a = d[4] or 255 }
     end
 
     local function applyGradient(image)
@@ -470,7 +469,6 @@ local function showMainDialog()
                 if hit then
                     -- start dragging the marker
                     selectedStop = stops[hit].id
-
                 else
                     -- create new marker
                     local pos = clampPos(mouseX)
@@ -649,18 +647,18 @@ local function showMainDialog()
     local function openPresets()
         local presetWidth, presetHeight = 72, 24
         local presetDlg = Dialog {
-            title = "Gradient Presets"}
+            title = "Gradient Presets" }
 
         local function addPresetCanvas(preset, index)
             if not preset then return end
-            presetDlg:canvas{
-                id = "preset_"..index,
+            presetDlg:canvas {
+                id = "preset_" .. index,
                 width = presetWidth,
                 height = presetHeight,
-                onpaint = function (ev)
+                onpaint = function(ev)
                     -- grabbing our graphics context
                     local gc = ev.context
-                    
+
                     for x = 0, presetWidth - 1 do
                         local c = sampleFromData(preset.data, x / (presetWidth - 1))
                         gc.color = c
@@ -668,14 +666,14 @@ local function showMainDialog()
                     end
                     gc:strokeRect(Rectangle(0, 0, presetWidth, presetHeight))
 
-                    pcall(function ()
-                        gc.color = Color {r = 0, g = 0, b = 0, a = 180}
+                    pcall(function()
+                        gc.color = Color { r = 0, g = 0, b = 0, a = 180 }
                         gc:fillText(preset.name, 5, 6)
-                        gc.color = Color {r = 255, g = 255, b = 255, a = 255}
+                        gc.color = Color { r = 255, g = 255, b = 255, a = 255 }
                         gc:fillText(preset.name, 4, 5)
                     end)
                 end,
-                onmousedown = function ()
+                onmousedown = function()
                     loadPreset(preset)
                     dirtyUI()
                 end
@@ -690,7 +688,7 @@ local function showMainDialog()
             presetDlg:newrow()
         end
 
-        presetDlg:show {wait = false}
+        presetDlg:show { wait = false }
     end
 
     dlg:button {
@@ -702,7 +700,7 @@ local function showMainDialog()
 
     dlg:button {
         text = "Apply Gradient",
-        onclick = function ()
+        onclick = function()
             local image = app.cel.image
             app.transaction("Gradient Map", function()
                 app.cel.image = applyGradient(image)
